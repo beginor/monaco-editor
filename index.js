@@ -52,5 +52,10 @@
         window.addEventListener('message', receiveMessage, false);
         var loading = document.getElementById('loading-indicator');
         loading.parentElement.removeChild(loading);
+        window.addEventListener('resize', function() {
+            if (!!editor) {
+                editor.layout();
+            }
+        });
     });
 })();
