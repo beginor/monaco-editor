@@ -34,6 +34,9 @@
         function receiveMessage(event) {
             origin = event.origin;
             var message = event.data;
+            if (!!message.vscodeSetImmediateId) {
+                return;
+            }
             if (message === 'getValue') {
                 sendCode();
                 return;
