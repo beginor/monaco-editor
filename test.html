@@ -10,9 +10,10 @@
   <div>
     <input type="button" value="Load Code" onclick="loadCode()">
     <input type="button" value="Get Code" onclick="getCode()">
+    <input type="button" value="Load XML" onclick="loadXml()">
   </div>
   <iframe id="monaco" name="monaco" style="width: 800px; height: 480px; border: 1px solid #ccc;"
-    src="https://beginor.github.io/monaco-editor/index.html" onload="loadCode()">
+    src="./index.html" onload="loadCode()">
   </iframe>
   <script>
     function loadCode() {
@@ -26,6 +27,16 @@
     function getCode() {
       var editor = document.getElementById('monaco');
       editor.contentWindow.postMessage('getValue', '*');
+    }
+
+    async function loadXml() {
+      var res = await fetch('test.xml');
+      var xml = await res.text();
+      var editor = document.getElementById('monaco');
+      editor.contentWindow.postMessage({
+        language: 'xml',
+        value: xml
+      }, '*');
     }
 
     function receiveMessage(e) {
