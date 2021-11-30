@@ -1,25 +1,26 @@
 /// <reference path="package/monaco.d.ts" />
 
-(function () {
+(() => {
     require.config({ paths: { 'vs': 'package/min/vs' }});
+    require.config({ 'vs/nls': { availableLanguages: { '*': 'zh-cn' }}});
+
     require(['vs/editor/editor.main'], function () {
         var editor;
         var origin;
+        // create editor
         function createEditor(value, language) {
-            var editor = monaco.editor.create(
-                document.getElementById('editor'),
-                {
-                    value: value,
-                    language: language,
-                    theme: 'vs',
-                    tabSize: 2,
-                    renderWhitespace: "boundary",
-                    minimap: {
-                        enabled: true
-                    },
-                    contextmenu: true
-                }
-            );
+            monaco.languages.html.registerHTMLLanguageService('xml', {}, { documentFormattingEdits: true });
+            var editor = monaco.editor.create(document.getElementById('editor'), {
+                value: value,
+                language: language,
+                theme: 'vs',
+                tabSize: 2,
+                renderWhitespace: "boundary",
+                minimap: {
+                    enabled: true
+                },
+                contextmenu: true
+            });
             return editor;
         }
         // send code to parent;
