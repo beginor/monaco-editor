@@ -13,9 +13,14 @@
     <input type="button" value="Load XML" onclick="loadXml()">
   </div>
   <iframe id="monaco" name="monaco" style="width: 800px; height: 480px; border: 1px solid #ccc;"
-    src="./index.html" onload="loadCode()">
+    src="./index.html" onload="addSmartSqlSupport()">
   </iframe>
+  <pre id="code"></pre>
   <script>
+    function addSmartSqlSupport() {
+      var editor = document.getElementById('monaco');
+      editor.contentWindow.postMessage('addSmartSqlSupport', '*');
+    }
     function loadCode() {
       var editor = document.getElementById('monaco');
       editor.contentWindow.postMessage({
@@ -29,6 +34,11 @@
       editor.contentWindow.postMessage('getValue', '*');
     }
 
+    function addSmartSqlSupport() {
+      var editor = document.getElementById('monaco');
+      editor.contentWindow.postMessage('addSmartSqlSupport', '*');
+    }
+
     async function loadXml() {
       var res = await fetch('test.xml');
       var xml = await res.text();
@@ -40,7 +50,8 @@
     }
 
     function receiveMessage(e) {
-      console.log(e.data);
+      // console.log(e.data);
+      document.getElementById('code').innerText = e.data;
     }
     window.addEventListener('message', receiveMessage, false);
   </script>
