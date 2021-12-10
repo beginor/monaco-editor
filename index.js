@@ -95,7 +95,7 @@
                 'Where': '<Where Min="${1:0}">${0}</Where>',
                 'Set': [
                     '<Set Min="${1:0}">',
-                    '  <IsProperty Property="${2:propName}" Prepend="${2:,}" Required="${3:true}">${0}</IsProperty>',
+                    '  <IsProperty Property="${2:propName}" Prepend="${3:,}" Required="${4:true}">${0}</IsProperty>',
                     '</Set>'
                 ].join('\n'),
                 'For': '<For Open="${1:(}" Close="${2:)}" Key="${3:key}" Property="${4:propName}" Separator="${5:,}">${0}</For>',
