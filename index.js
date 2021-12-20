@@ -43,7 +43,7 @@
         function receiveMessage(event) {
             origin = event.origin;
             const data = event.data;
-            if (!!data.vscodeSetImmediateId) {
+            if (!!data.vscodeScheduleAsyncWork) {
                 return;
             }
             if (data === 'addSmartSqlSupport') {
@@ -103,12 +103,40 @@
                 'CDATA': '<![CDATA[${0}]]>',
                 'Comment': '<!-- ${0} -->'
             };
+            /** @type {String[]} */
+            const texts = [];
             monaco.languages.html.registerHTMLLanguageService('xml', { }, { documentFormattingEdits: true });
             monaco.languages.registerCompletionItemProvider(
                 'xml',
                 {
                     provideCompletionItems: (model, position) => {
+                        // 去尖括号部分 /\<(.*)\>/g
+                        const words = model.getValue().replace(/[,\s\(\)'\|>=%<>?"\.\/]/g, '\n').split('\n');
+                        for (const word of words) {
+                            const trimmed = word.trim();
+                            if (trimmed.length == 0) {
+                                continue;
+                            }
+                            if (!!snippets[trimmed]) {
+                                continue;
+                            }
+                            if (texts.indexOf(trimmed) > -1) {
+                                continue;
+                            }
+                            if (texts.filter(v => v.indexOf(trimmed) > -1).length > 0) {
+                                continue;
+                            }
+                            texts.push(trimmed);
+                        }
                         const suggestions = [];
+                        texts.forEach(txt => {
+                            suggestions.push({
+                                label: txt,
+                                insertText: txt,
+                                kind: monaco.languages.CompletionItemKind.Text,
+                                insertTextRules: monaco.languages.CompletionItemInsertTextRule.InsertAsSnippet
+                            });
+                        });
                         for (const key in snippets) {
                             if (Object.hasOwnProperty.call(snippets, key)) {
                                 suggestions.push({
