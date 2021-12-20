@@ -110,7 +110,7 @@
                 'xml',
                 {
                     provideCompletionItems: (model, position) => {
-                        // 去尖括号部分 /\<(.*)\>/g
+                        // 根据上下文可能的分隔符进行分词
                         const words = model.getValue().replace(/[,\s\(\)'\|>=%<>?"\.\/]/g, '\n').split('\n');
                         for (const word of words) {
                             const trimmed = word.trim();
